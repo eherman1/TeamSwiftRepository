@@ -101,6 +101,8 @@
         android:layout_alignRight="@+id/twoButtonLL"
         android:layout_below="@+id/viewOtherInfo"
         android:ems="10"
+        android:maxLength="250"
+        android:gravity="top"
         android:inputType="textMultiLine" />
 
     <!-- To put multiple buttons on one line unit -->
@@ -111,7 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/viewOtherInfo"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="109dp"
+        android:layout_marginBottom="40dp"
         android:paddingBottom="15dp"
         android:paddingTop="15dp" >
 

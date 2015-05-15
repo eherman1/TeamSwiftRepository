@@ -1,7 +1,7 @@
 /*
- * Abstract Category
- * 
- * The class that all other categories will inherit from (Basketball, Baseball, E-Sports, etc)
+ * Category
+ *
+ * This class acts like a wrapper for the ParseObject class Category
  */
 package edu.ucsd.teamswift.letsgo;
 
@@ -16,7 +16,11 @@ public class Category extends ParseObject {
 	 */
 	public Category() {}
 
-	//get and set CategoryName
+	public String getCategoryId()
+	{
+		return getObjectId();
+	}
+	
 	public String getCategoryName()
 	{
 		return getString("Name");
