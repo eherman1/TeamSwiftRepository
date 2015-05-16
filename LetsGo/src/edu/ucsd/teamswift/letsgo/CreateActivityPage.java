@@ -125,8 +125,16 @@ public class CreateActivityPage extends Activity {
 				//start time
 				//end time
 				//location
-				
-				numberOfPlayers = Integer.parseInt(inputNumPeople.getText().toString());
+		
+				//This is just a check to see if its empty since Parse will complain.
+				if(inputNumPeople.getText().toString().compareTo("") == 0) 
+				{
+						numberOfPlayers = 1;
+				}
+				else 
+				{
+					numberOfPlayers = Integer.parseInt(inputNumPeople.getText().toString());
+				}
 				createdActivityRoom.setNumberOfPlayers(numberOfPlayers);
 				
 				createdActivityRoom.setOtherInformation(inputOtherInfo.getText().toString());

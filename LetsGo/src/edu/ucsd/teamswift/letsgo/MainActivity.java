@@ -15,16 +15,15 @@ import com.parse.ParseUser;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 
-// by noor
 import edu.ucsd.teamswift.letsgo.DialogPopUp;
 import android.app.Activity;	
-// Added by noor
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 
 public class MainActivity extends Activity {
 
@@ -149,7 +148,7 @@ public class MainActivity extends Activity {
 							else {
 								/* Pop up menu to tell user to complete form */
 								// Call DialogPopUp("title", "msg", "context")
-								DialogPopUp.DialogPop("There was a problem", "No Such user exist, please sign up", pageContext);
+								DialogPopUp.DialogPop("There was a problem", "No such user exist, please sign up", pageContext);
 							
 							}
 						}
