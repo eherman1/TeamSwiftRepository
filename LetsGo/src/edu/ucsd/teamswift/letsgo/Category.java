@@ -1,77 +1,111 @@
-/*
- * Abstract Category
+/* Team: SWIFT					Project: Let'sGo	  			
+ * Use: Abstract Category
+ * Description: 
+ * 		The class that all other activity categories will inherit 
+ * 		from (ie Basketball, Baseball, E-Sports, etc);
  * 
- * The class that all other categories will inherit from (Basketball, Baseball, E-Sports, etc)
+ * Methods:
+ * 		public public Category()
+ * 		public String getCategoryName()
+ * 		public boolean isJoinOnly()
+ *    public int getActivityLevel()
+ * 		public Bitmap getCategoryIcon()
+ * 		private void giveIcon(Bitmap I)
+ * 
+ * Created by: Steven
+ * 
+ * Modified by: Sang, Added public Bitmap getCategoryIcon() and included all comments
  */
 package edu.ucsd.teamswift.letsgo;
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-import android.widget.ImageView;
-
-import com.parse.GetDataCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseImageView;
 import com.parse.ParseObject;
 
 @ParseClassName(value = "Category")
 public class Category extends ParseObject {
-	Bitmap icon;
-	/*
-	 * Category constructor
-	 */
+	
+	/* Variables */
+	private Bitmap icon;
+	
+	/* Category constructor */
 	public Category() {}
-
-	//get and set CategoryName
-	public String getCategoryName()
-	{
+	
+	/* Gets the name of the category */
+	public String getCategoryName(){
 		return getString("Name");
 	}
 	
-	public boolean isJoinOnly()
-	{
+ /* Gets the boolean if the activity is a join only Activity for Category List
+	* If false then will create on Create Activity List
+	* If true then create on Join Activity List */
+	public boolean isJoinOnly(){
 		return getBoolean("JoinOnly");
 	}
 	
-	public int getActivityLevel()
-	{
+	/* Gets Integer of each category of Activities
+	 * If 0 then not physical (ie chess)
+	 * If 1 then physical (ie football)
+	 * Other number used for future */
+	public int getActivityLevel(){
 		return getInt("ActivityLevel");
 	}
 	
-	//get and set CategoryIcon
-	/* TODO */
+	/* Gets the icon of activity from database and converts to bitmap*/
 	public Bitmap getCategoryIcon(){
 		
-		// Locate the column named "ImageName" and set the string
-		ParseFile fileObject = getParseFile("Icon");
+		// Locate the column named "Icon" and set the string
+		final ParseFile fileObject = getParseFile("Icon");
 		
+		/* If a activity has no icon then return Null */
 		if(fileObject == null)
-		{
+			return null;
+		
+	/******* Delete NOT Until we know for sure we do not need **********/	
+//		fileObject.getDataInBackground(new GetDataCallback(){
+//			@Override
+//			public void done(byte[] data, ParseException e) {
+//				if(e == null){	
+//					Bitmap icon = BitmapFactory.decodeByteArray(data, 0, data.length);
+//				  giveIcon(icon);	  
+//				} 
+//				else {
+//					giveIcon(null);
+//					Log.e("bitmap","There was a problem downloading the data.");
+//				}
+//			}
+//		});
+		
+		
+		
+		/* Try / Catch to get icon from */
+		try {
+			
+			/* Parse files are in byte array form and use getData()
+			 * to get download data synchronously*/
+			byte[] data = fileObject.getData();
+			
+			/* Decode array into Bitmap */
+			Bitmap icon = BitmapFactory.decodeByteArray(data, 0, data.length);
+			
+			/* Need method to get icon out of nested method */
+			giveIcon(icon);
+			
+		} 
+		/* Exception handling if try fails */
+		catch (ParseException e) {
+			e.printStackTrace();
 			return null;
 		}
-		fileObject.getDataInBackground(new GetDataCallback(){
-
-			@Override
-			public void done(byte[] data, ParseException e) {
-				if(e == null)
-				{
-					Bitmap icon = BitmapFactory.decodeByteArray(data, 0, data.length);
-				  giveIcon(icon);
-				} else {
-					giveIcon(null);
-					Log.e("bitmap","There was a problem downloading the data.");
-				}
-			}
-		});
+		
+		/* return bitmap icon*/
 		return icon;
 	}
 	
-	
+	/* Created method to get icon out of nested method*/
 	private void giveIcon(Bitmap I){
 		icon = I;
 	}

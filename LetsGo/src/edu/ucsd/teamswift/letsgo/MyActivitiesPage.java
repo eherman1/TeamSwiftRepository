@@ -7,10 +7,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 public class MyActivitiesPage extends Activity {
-
-	
 	//Local variable
-	
 	Button DeleteActivityBut;
 	Button EditActivityBut;
 	Button MoreActivityInfoBut;

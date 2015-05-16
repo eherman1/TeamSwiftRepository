@@ -1,9 +1,9 @@
 package edu.ucsd.teamswift.letsgo;
-
 import com.parse.ParseUser;	
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,11 +14,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class HomePage extends Activity {
-
 	//Local variable
-	Button letsGoPlayBut;
-	Button activitiesBut;
-	Button logOutBut;
+	private Button letsGoPlayBut;
+	private Button activitiesBut;
+	private Button logOutBut;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public class HomePage extends Activity {
 		// Set the currentUser String into TextView
 		userId.setText("You are logged in as " + userIdString);
 		//Lets program look for and find the Lets Go Play and Activities Button
-	    letsGoPlayBut = (Button)this.findViewById(R.id.letsGoPlayBut);
+	  letsGoPlayBut = (Button)this.findViewById(R.id.letsGoPlayBut);
 		activitiesBut = (Button)this.findViewById(R.id.myActivitiesBut);
 		logOutBut = (Button)this.findViewById(R.id.logOutBut);
 		
@@ -45,10 +44,7 @@ public class HomePage extends Activity {
 		letsGoPlayBut.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-			/*TODO*/
-				//Eric link to Join and Create
-			// POP out Menu to chose between Create Game or Join Game
-				//final ArrayList mSelectedItems = new ArrayList();
+			
 				String[] displayItems = {"Create an Activity", "Join an Activity"};
 				AlertDialog.Builder builder = new AlertDialog.Builder(HomePage.this);
 				builder.setTitle("Let's Go");
@@ -60,20 +56,19 @@ public class HomePage extends Activity {
 								//go to Create Activity
 								Intent moveToCreateActivities = new Intent(HomePage.this, CreateCategoryPage.class);
 								moveToCreateActivities.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-								startActivity(moveToCreateActivities);							
+								startActivity(moveToCreateActivities);
 								break;
 							}
-						case 1:{
-							//go to Join activity 
-							Intent moveToJoinActivities = new Intent(HomePage.this, JoinCategoryPage.class);
-							moveToJoinActivities.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-							startActivity(moveToJoinActivities);						
-							break;
-						}
-
+							case 1:{
+								//go to Join activity 
+								Intent moveToJoinActivities = new Intent(HomePage.this, JoinCategoryPage.class);
+								moveToJoinActivities.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+								startActivity(moveToJoinActivities);
+								break;
+							}
 						}	
 					}
-		        });
+		    });
 				builder.show();
 			}
 		});
@@ -96,7 +91,7 @@ public class HomePage extends Activity {
 				// Logout current user
 				ParseUser.logOut();
 				//Intent will allow user to transition to login page
-				Intent moveToLoginPage = new Intent(HomePage.this, MainActivity.class);
+				Intent moveToLoginPage = new Intent(HomePage.this, SignInPage.class);
 				
 				//Makes it so the login page is a unique task
 				moveToLoginPage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

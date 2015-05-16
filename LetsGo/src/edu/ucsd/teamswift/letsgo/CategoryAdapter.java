@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.parse.ParseImageView;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -24,7 +25,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
-
+	
+	private ProgressDialog progressDialog;
+		
 	public CategoryAdapter(Context context, List<Category> values) {
 		super(context, R.layout.category_row_horizontal, values);
 		// TODO Auto-generated constructor stub
@@ -61,6 +64,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
     //If there is a picture or no problems
 		if (categoryIcon != null) {
+			
 			Drawable d = new BitmapDrawable(getContext().getResources(), categoryIcon);
 			categoryNameTextView.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
 		}

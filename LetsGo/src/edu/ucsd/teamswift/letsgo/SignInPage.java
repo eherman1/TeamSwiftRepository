@@ -26,7 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class MainActivity extends Activity {
+public class SignInPage extends Activity {
 
 	
 	Button forgotPasswordBut;
@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
 	
 	
 	// PageContext is a variable to hold the page name to pass it to DialogPopUp()
-	Context pageContext = MainActivity.this;
+	Context pageContext = SignInPage.this;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 
 		//Parse is now located in MainApplication.java
 		
-		//Lets program look for and find the sign up button
+		/* Lets program look for and find the page buttons */
 		forgotPasswordBut = (Button)this.findViewById(R.id.forgotPasswordBut);
 		signUpBut = (Button)this.findViewById(R.id.signUpBut);
 		logInBut = (Button)this.findViewById(R.id.logInBut);
@@ -75,8 +75,8 @@ public class MainActivity extends Activity {
 				//DialogFragment dialogPopup = new ForgotPasswordDialog();			
 				//dialogPopup.show(getFragmentManager(), "ForgotPasswordDialogTag");
 				
-				//Intent will allow user to transition to sign up page
-				Intent moveToCreatePage = new Intent(MainActivity.this, CreateActivityPage.class);
+				//Intent will allow user to move to sign up page
+				Intent moveToCreatePage = new Intent(SignInPage.this, CreateActivityPage.class);
 				
 				//Makes it so the sign up page is a unique task
 				moveToCreatePage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 			
 				//Intent will allow user to transition to sign up page
-				Intent moveToSignUpPage = new Intent(MainActivity.this, SignUpPage.class);
+				Intent moveToSignUpPage = new Intent(SignInPage.this, SignUpPage.class);
 				
 				//Makes it so the sign up page is a unique task
 				moveToSignUpPage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -114,26 +114,24 @@ public class MainActivity extends Activity {
 		 * 
 		 * Logic that handles the log in and transitions to the Home Page
 		 */
-		logInBut.setOnClickListener(new View.OnClickListener() {
-					
+		logInBut.setOnClickListener(new View.OnClickListener() {				
 			@Override
 			public void onClick(View v) {
-				/*Intent moveToHomePage = new Intent(MainActivity.this, HomePage.class);
-				moveToHomePage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(moveToHomePage);*/
-				
-				/*TODO*/
 				//Before transition, check if Login Credential are good on parse carry token 
 				// getText from the login page and store it in strings
 				emailString = emailEditText.getText().toString();
 				passwordStirng = passwordEditText.getText().toString();
 
 				// Send data to parse for verification
-				ParseUser.logInInBackground(emailString, passwordStirng, new LogInCallback() {
+				//ParseUser.logInInBackground(emailString, passwordStirng, new LogInCallback() {
+				
+				
+				//Temp log in so no sign in
+				ParseUser.logInInBackground("p@w.com", "abc", new LogInCallback() {
 					public void done(ParseUser user, ParseException e) {
 						if (user != null) {
 							// if the user exist and authenticated, send user to home screen
-							Intent moveToHomePage = new Intent(MainActivity.this, HomePage.class);
+							Intent moveToHomePage = new Intent(SignInPage.this, HomePage.class);
 							moveToHomePage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 							startActivity(moveToHomePage);
 						} else {
@@ -160,25 +158,4 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
-
-	
-	//Removed Menu Icon on Opening Page
-/*	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}*/
 }

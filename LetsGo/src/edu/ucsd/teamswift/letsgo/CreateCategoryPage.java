@@ -1,11 +1,27 @@
+/* Team: SWIFT					Project: Let'sGo	  			
+ * Use: Called from LetsGo button on Home Page
+ * Description: 
+ * 		This creates and populates the list view on the Create Category Page
+ * 		by calling parse and getting the categories it will create a click-able  
+ * 	  list to create an activity
+ * 
+ * Methods:
+ *		protected void onCreate(Bundle savedInstanceState)
+ * 		private void fillListView()
+ * 		private void retrieveCategories() 
+ * 		
+ * 		protected void objectsWereRetrievedSuccessfully(List<Category> categoryList)
+ * 
+ * Created by: Steven
+ * 
+ * Modified by: Sang, added progressDialog and modified and added comments
+ */
 package edu.ucsd.teamswift.letsgo;
 
 import java.util.List;
-
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,47 +36,50 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class CreateCategoryPage extends Activity {
-	ListView categoryListView;
-	Button backButton;
+	
+	/* Variables */
+	private ListView categoryListView;
+	private Button backButton;
+	private ProgressDialog progressDialog;
 
-	//The list of categories retrieved from Parse
+	/* The list of categories retrieved from Parse */
 	List<Category> categoryList;
 	
 	@Override
+	/* Standard pre-made method to create android Create Activity Page */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_category_page);
 		
-		//Find widgets in the view
+		/* UI for loading pop-up screen; must be followed by dismiss()*/
+		progressDialog = ProgressDialog.show(CreateCategoryPage.this, "", "Downloading Image...", true);
+		
+		/* Find widgets in the view */
 		categoryListView = (ListView)this.findViewById(R.id.categoryListView);
 		backButton = (Button)this.findViewById(R.id.backButton);
 		
-		//Back button takes user back to Home Page
+		/* Back button listener to  take user back to Home Page */
 		backButton.setOnClickListener(new View.OnClickListener() {
-
-			
 			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		
-		//Retrieve categories from Parse
+		/* Retrieve categories from Parse */
 		retrieveCategories();
 		
+		/* Closes the download Progress UI pop-up */
+		progressDialog.dismiss();
 	}
 
-	/*
-	 * fillListView
-	 * 
-	 * When the categoryList is populated, this function is called to fill the list.
-	 */
-	private void fillListView() 
-	{
-		//The adapter turns our array into a usable format for our ListView
+	/* When the categoryList is populated, this method is called to fill the list. */
+	private void fillListView(){
+		
+		/* The adapter turns our array into a usable format for our ListView */
 		ListAdapter listViewAdapter = new CategoryAdapter(this, categoryList);
 	
-		//Link the ListView with our Adapter
+		/* Link the ListView with our Adapter */
 		categoryListView.setAdapter(listViewAdapter);
 
 		//Used for clicks on the items in the list
@@ -95,11 +114,7 @@ public class CreateCategoryPage extends Activity {
 		
 	}
 
-	/*
-	 * retrieveCategories
-	 * 
-	 * Does a Parse query to retrieve all the Category items
-	 */
+	/* Called to do a Parse query to retrieve all the Category items */
 	private void retrieveCategories() 
 	{
 		//Limit the query to those of class Category
@@ -137,8 +152,7 @@ public class CreateCategoryPage extends Activity {
 	 * 
 	 * Calls the fillListView function after the list is retrieved.
 	 */
-	protected void objectsWereRetrievedSuccessfully(List<Category> categoryList) 
-	{
+	protected void objectsWereRetrievedSuccessfully(List<Category> categoryList){
 		this.categoryList = categoryList;
 		
 		fillListView();
