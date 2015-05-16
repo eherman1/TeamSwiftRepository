@@ -53,7 +53,7 @@
     <string name="title_activity_sign_up_page">Sign Up</string>
     <string name="title_activity_home_page">Home</string>
     <string name="title_activity_create_join_page">Create or Join</string>
-    <string name="title_activity_create_category_page">Create - Catergories</string>
+    <string name="title_activity_create_category_page">Create - Categories</string>
     <string name="title_activity_join_category_page">Join - Categories</string>
     <string name="title_activity_create_actvity_page">Create an Actvity</string>
     <string name="title_activity_join_available_game_page">Join Available Games</string>

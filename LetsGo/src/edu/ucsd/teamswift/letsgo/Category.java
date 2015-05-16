@@ -1,8 +1,8 @@
 /* Team: SWIFT					Project: Let'sGo	  			
- * Use: Abstract Category
+ * Use: Category from parse
  * Description: 
  * 		The class that all other activity categories will inherit 
- * 		from (ie Basketball, Baseball, E-Sports, etc);
+ * 		fields (ie Basketball, Baseball, E-Sports, etc);
  * 
  * Methods:
  * 		public public Category()
@@ -33,9 +33,13 @@ public class Category extends ParseObject {
 	
 	/* Category constructor */
 	public Category() {}
+	public String getCategoryId()
+	{
+		return getObjectId();
+	}
 	
-	/* Gets the name of the category */
-	public String getCategoryName(){
+	public String getCategoryName()
+	{
 		return getString("Name");
 	}
 	

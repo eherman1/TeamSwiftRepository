@@ -18,11 +18,15 @@
  */
 package edu.ucsd.teamswift.letsgo;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,9 +47,13 @@ public class CreateActivityPage extends Activity {
 	private Button cancelCreateBut;
 	private Button createBut;
 	
+	ParseUser user;
 	String userName;
-	String activityType;
+	String categoryId;
+	Category category;
+	String activityName;
 	int activityLevel;
+	int numberOfPlayers;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,16 +71,30 @@ public class CreateActivityPage extends Activity {
 		cancelCreateBut = (Button)findViewById(R.id.cancelCreateBut);
 		createBut = (Button)findViewById(R.id.createBut);
 		
-		/* Gets the current Parse User */
-		userName = ParseUser.getCurrentUser().getUsername();
+		//Get the current Parse User
+		user = ParseUser.getCurrentUser();
+		userName = user.getUsername();
 		
-		/* Get information from previous Activity Page */ 
-		activityType = getIntent().getStringExtra("ActivityName");
-		activityLevel = getIntent().getIntExtra("ActivityLevel", 0);
+		//Get information from previous Activity Page
+		categoryId = getIntent().getStringExtra("CategoryId");
+		
+		//Uses the categoryId to find the Category on Parse
+		ParseQuery<Category> categoryQuery = ParseQuery.getQuery("Category");
+		categoryQuery.getInBackground(categoryId, new GetCallback<Category>() {
+
+			@Override
+			public void done(Category retrievedCategory, ParseException e) {
+				if (e == null) {
+					successfullyRetrievedCategory(retrievedCategory);
+				} else {
+					Log.e("CreateActivityPage - Parse Exeception", "Could not retrieved category");
+				}
+			}
+			
+		});
 		
 		/* Fills automatically user name and Activity Type fields from\previous screen */
 		textUserName.setText(userName);
-		textActivityName.setText(activityType);
 		
 		/* Listener for cancel button to go back to HomePage */
 		cancelCreateBut.setOnClickListener(new View.OnClickListener(){	
@@ -89,9 +111,73 @@ public class CreateActivityPage extends Activity {
 				startActivity(moveToCreateCategoryPage);
 			}
 		});
+		
+		createBut.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+			
+				/*
+				 * ActivityRoom:
+				 * 
+				 * Creator
+				 * Category
+				 * StartDate
+				 * StartTime
+				 * EndTime
+				 * Location
+				 * NumberOfPlayers
+				 * OtherInformation
+				 * ActivityLevel
+				 * Players
+				 */
+				ActivityRoom createdActivityRoom = new ActivityRoom();
+				
+				createdActivityRoom.setCreator(ParseUser.getCurrentUser());
+
+				createdActivityRoom.setCategory(category);
+				
+				//start date
+				//start time
+				//end time
+				//location
+		
+				//This is just a check to see if its empty since Parse will complain.
+				if(inputNumPeople.getText().toString().compareTo("") == 0) 
+				{
+						numberOfPlayers = 1;
+				}
+				else 
+				{
+					numberOfPlayers = Integer.parseInt(inputNumPeople.getText().toString());
+				}
+				createdActivityRoom.setNumberOfPlayers(numberOfPlayers);
+				
+				createdActivityRoom.setOtherInformation(inputOtherInfo.getText().toString());
+				
+				createdActivityRoom.setActivityLevel(activityLevel);
+				
+				createdActivityRoom.saveInBackground();
+			}
+			
+		});
+		
 	}
-	/******************************************************************************/
-	              //Jake make fields and pop up for confirmation
+	
+	/*
+	 * successfullyRetrievedCategory
+	 * 
+	 * The function called after Parse retrieves the category user wanted to create.
+	 */
+	protected void successfullyRetrievedCategory(Category retrievedCategory) {
+		category = retrievedCategory;
+		activityName = category.getCategoryName();
+		activityLevel = category.getActivityLevel();
+		
+		textActivityName.setText(activityName);
+	}
+	
+	//Jake make fields and pop up for confirmation
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

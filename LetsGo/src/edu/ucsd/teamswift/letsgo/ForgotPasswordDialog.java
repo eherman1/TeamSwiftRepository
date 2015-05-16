@@ -10,48 +10,71 @@
 
 package edu.ucsd.teamswift.letsgo;
 
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
+
+import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.util.Log;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class ForgotPasswordDialog extends DialogFragment {
 
+	EditText emailUserEditText;
+	String emailString;
+	Activity MainAcitvity;
+	String ss;
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
+		MainAcitvity = getActivity();
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 	    /*
 	     * Have to set the properties of the builder object which is the dialog.
 	     * View inflate will use the layout forgot_password_dialog as the view.
 	     */
-	    builder.setTitle("Enter e-mail you dumbass")
-	    	.setView(View.inflate(getActivity(), R.layout.forgot_password_dialog, null))
-	    	/*
-	    	 * Add all the buttons here.
-	    	 * PositiveButton is the accept type button.
-	    	 * NegativeButton is the cancel/back type button.
-	    	 */
-           .setPositiveButton(R.string.submitBut, new DialogInterface.OnClickListener() {
+		
+		final View dialogForgetPass = View.inflate(getActivity(), R.layout.forgot_password_dialog,null);
+	    builder.setTitle("Please enter your email address and we'll send you a recovery link.").setView(dialogForgetPass).setPositiveButton(R.string.submitBut,
+	    											new DialogInterface.OnClickListener() {
                @Override
                public void onClick(DialogInterface dialog, int id) {
-            	   /* TODO
-            	    * 
-            	    * Put the action taken when user presses submit here.
-            	    */
-            	   Log.e("ForgotPasswordDialog", "You pressed the submit button!");
+            	   
+            	   // Find in the layout
+            	   emailUserEditText= (EditText)dialogForgetPass.findViewById(R.id.emailEditText);
+            	   // Get the user email
+            	   emailString = emailUserEditText.getText().toString();
+            	   // Call Parse to request reset password and sent an email
+            	   ParseUser.requestPasswordResetInBackground(emailString, new RequestPasswordResetCallback() {
+            		   public void done(ParseException e) {
+            		     if (e == null) {
+            		    	 // An email was successfully sent with reset instructions.
+            		    	 Toast.makeText(MainAcitvity.getApplicationContext(), 
+                                     "An email was successfully sent with reset instructions.", Toast.LENGTH_LONG).show();
+            		     } else {
+            		    	 // Something went wrong. Look at the ParseException to see what's up.
+            		    	 Toast.makeText(MainAcitvity.getApplicationContext(), 
+                                     "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+            		     }
+            		   }
+            		 });
                }
-           })
-           .setNegativeButton(R.string.cancelBut, new DialogInterface.OnClickListener() {
+           }).setNegativeButton(R.string.cancelBut, new DialogInterface.OnClickListener() {
                public void onClick(DialogInterface dialog, int id) {
                    ForgotPasswordDialog.this.getDialog().cancel();
                }
            }); 
-
+	    
 		return builder.create();
 	}
+	
+	
 }
